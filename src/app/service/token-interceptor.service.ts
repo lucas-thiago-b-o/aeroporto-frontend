@@ -6,18 +6,20 @@ import {AuthService} from "./auth.service";
 @Injectable({
   providedIn: 'root'
 })
-export class TokenInterceptorService implements HttpInterceptor{
+export class TokenInterceptorService implements HttpInterceptor {
 
   constructor(private inject: Injector) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let authService = this.inject.get(AuthService);
-    let jwtToken = req.clone({
-      setHeaders: {
-        Authorization: 'Bearer ' + authService.getToken()
-      }
-    });
+    if (authService.getToken() != null && authService.getToken().length > 0) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: 'Bearer ' + authService.getToken()
+        }
+      });
+    }
 
-    return next.handle(jwtToken);
+    return next.handle(req);
   }
 }

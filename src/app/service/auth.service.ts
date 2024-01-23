@@ -1,16 +1,22 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  apiUrl = "http://localhost:8080/auth/login"
+  apiUrlLogin = "http://localhost:8080/api/auth/login"
+  apiUrlRegister =  "http://localhost:8080/api/auth/register";
 
   constructor(private http:HttpClient) { }
 
-  proceedLogin(usercred: any) {
-    return this.http.post(this.apiUrl, usercred);
+  proceedLogin(usercred: any): Observable<any> {
+    return this.http.post(this.apiUrlLogin, usercred);
+  }
+
+  proceedRegister(usercred: any): Observable<any> {
+    return this.http.post(this.apiUrlRegister, usercred, { responseType: 'text' });
   }
 
   isLoggedIn() {
@@ -26,10 +32,10 @@ export class AuthService {
     var _extractedToken = logginToken.split('.')[1];
     var _atobData = atob(_extractedToken);
     var _finalData = JSON.parse(_atobData);
-    /*if (_finalData.role === 'admin') {
+     if (_finalData.role === 'admin') {
       return true;
-    }*/
-    // console.log("you not having access");
-    console.log(_finalData);
+     }
+    alert("you not having access");
+    return false;
   }
 }
