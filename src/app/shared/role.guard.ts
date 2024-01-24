@@ -13,8 +13,7 @@ export class RoleGuard implements CanActivate {
   ) { }
 
   canActivate() {
-    this.service.haveAccess();
-    return true;
+    return this.service.haveAccess();
   }
 
 }

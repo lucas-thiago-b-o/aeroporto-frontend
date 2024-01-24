@@ -6,7 +6,16 @@
                 Home
             </a>
             <a mat-list-item>
-                <i class="material-icons">menu_book</i>
+                <i class="material-icons">shopping_cart</i>
+                Comprar Passagens
+            </a>
+            <a *ngIf="service.haveAccess()" mat-list-item>
+                <i class="material-icons">flight_takeoff</i>
+                Voôs
+            </a>
+            <a (click)="logout()" mat-list-item class="logout">
+                <i class="material-icons">logout</i>
+                LogOut
             </a>
         </mat-nav-list>
     </mat-sidenav>

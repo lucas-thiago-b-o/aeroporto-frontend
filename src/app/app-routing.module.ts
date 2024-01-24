@@ -4,6 +4,8 @@ import {HomeComponent} from "./components/views/home/home.component";
 import {AuthGuard} from "./shared/auth.guard";
 import {RoleGuard} from "./shared/role.guard";
 import {LoginComponent} from "./components/auth/login/login.component";
+import {PassagemComponent} from "./components/views/passagem/passagem.component";
+import {VooComponent} from "./components/views/voo/voo.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -11,6 +13,16 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'comprar_passagem',
+    component: PassagemComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'voos',
+    component: VooComponent,
+    canActivate: [RoleGuard]
   }
 ];
 

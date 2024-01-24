@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {AuthService} from "../../../service/auth.service";
 import {Router} from "@angular/router";
+import {jwtDecode} from "jwt-decode";
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ export class LoginComponent implements OnInit {
   form: FormGroup = new FormGroup({
     username: new FormControl(''),
     password: new FormControl(''),
+    role: new FormControl('USER')
   });
 
   constructor(
@@ -21,22 +23,41 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    //console.log(this.service.isLoggedIn());
   }
 
   proceedLogin(formValue: any) {
-    this.service.proceedLogin(formValue).subscribe(result => {
+    this.service.proceedLogin({username: formValue.username, password: formValue.password}).subscribe(result => {
       if (result) {
-        console.log(result);
-        //localStorage.setItem('token', result);
-        //this.route.navigate(['']);
+        const jwtDecoder = jwtDecode(result.token);
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('uuid', <string>jwtDecoder.jti);
+        this.route.navigate(['']);
       }
+    }, (error) => {
+      alert(error.error);
     });
   }
 
-  submit() {
+  proceedRegister(formValue: any) {
+    this.service.proceedRegister(formValue).subscribe(result => {
+      if (result) {
+        alert(result);
+      }
+    }, (error) => {
+      alert(error.error);
+    });
+  }
+
+  submitLogin() {
     if (this.form.valid) {
       this.proceedLogin(this.form.value);
+    }
+  }
+
+  submitRegister() {
+    if (this.form.valid) {
+      this.proceedRegister(this.form.value);
     }
   }
 

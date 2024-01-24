@@ -6,3 +6,8 @@
 i {
     padding-right: .6rem;
 }
+
+.logout {
+    position: absolute;
+    bottom: 0;
+}

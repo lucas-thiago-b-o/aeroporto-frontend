@@ -23,6 +23,8 @@ import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {TokenInterceptorService} from "./service/token-interceptor.service";
 import {HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
+import { PassagemComponent } from './components/views/passagem/passagem.component';
+import { VooComponent } from './components/views/voo/voo.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import {RouterModule} from "@angular/router";
     NavComponent,
     HomeComponent,
     LoginComponent,
+    PassagemComponent,
+    VooComponent,
   ],
   imports: [
     BrowserModule,
