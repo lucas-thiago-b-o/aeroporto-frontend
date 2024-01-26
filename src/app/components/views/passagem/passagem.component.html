@@ -1,1 +1,37 @@
-<p>passagem works!</p>
+<mat-card class="home mat-elevation-z4">
+    <form class="example-form">
+        <mat-form-field class="autocompletes">
+            <mat-label>Origem</mat-label>
+            <input #input
+                   type="text"
+                   placeholder="Selecione o local de origem"
+                   matInput
+                   [formControl]="myControlOrigem"
+                   [matAutocomplete]="auto"
+                   (input)="filterOrigem()"
+                   (focus)="filterOrigem()">
+            <mat-autocomplete requireSelection #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptionsOrigem" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field class="autocompletes">
+            <mat-label>Destino</mat-label>
+            <input #input2
+                   type="text"
+                   placeholder="Selecione o local de destino"
+                   matInput
+                   [formControl]="myControlDestino"
+                   [matAutocomplete]="auto2"
+                   (input)="filterDestino()"
+                   (focus)="filterDestino()">
+            <mat-autocomplete requireSelection #auto2="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptionsDestino" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <button type="submit" (click)="pesquisarPassagens()" mat-button>Procurar</button>
+    </form>
+</mat-card>

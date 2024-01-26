@@ -25,6 +25,9 @@ import {HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
 import { PassagemComponent } from './components/views/passagem/passagem.component';
 import { VooComponent } from './components/views/voo/voo.component';
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -51,7 +54,11 @@ import { VooComponent } from './components/views/voo/voo.component';
     MatButtonModule,
     MatInputModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    // MatMomentDateModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass:TokenInterceptorService, multi: true}],
   bootstrap: [AppComponent]
