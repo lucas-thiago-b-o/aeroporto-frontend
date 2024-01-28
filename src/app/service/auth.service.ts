@@ -1,19 +1,32 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {Router} from "@angular/router";
+import {filter, Observable} from "rxjs";
+import {NavigationEnd, NavigationStart, Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   apiUrlLogin = "http://localhost:8080/api/auth/login"
+  apiUrlPingUser = "http://localhost:8080/api/auth/pingUser"
   apiUrlRegister =  "http://localhost:8080/api/auth/register";
 
   constructor(
       private http: HttpClient,
       private route: Router
-  ) { }
+  ) {
+    this.route.events
+        .pipe(filter((rs): rs is NavigationStart => rs instanceof NavigationStart))
+        .subscribe(async event => {
+          if (!event.restoredState) {
+            const ping = await this.http.get<Observable<boolean>>(`${this.apiUrlPingUser}/${this.getUuid()}`).toPromise().catch(() => this.loggingOut());
+
+            if (!ping) {
+              this.loggingOut();
+            }
+          }
+        })
+  }
 
   proceedLogin(usercred: any): Observable<any> {
     return this.http.post(this.apiUrlLogin, usercred);
@@ -24,7 +37,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    var logginToken = localStorage.getItem("token");
+    var logginToken = this.getToken();
     let isExpirado: number | undefined | boolean = false;
 
     if (logginToken) {
@@ -52,8 +65,12 @@ export class AuthService {
     return localStorage.getItem("token") || '';
   }
 
+  getUuid() {
+    return localStorage.getItem("uuid") || '';
+  }
+
   haveAccess() {
-    var logginToken = localStorage.getItem("token") || '';
+    var logginToken = this.getToken();
     var _extractedToken = logginToken.split('.')[1];
     var _atobData = atob(_extractedToken);
     var _finalData = JSON.parse(_atobData);
