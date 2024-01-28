@@ -18,16 +18,19 @@ import { MatCardModule } from "@angular/material/card";
 import { LoginComponent } from './components/auth/login/login.component';
 import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {HTTP_INTERCEPTORS} from "@angular/common/http";
-import {TokenInterceptorService} from "./service/token-interceptor.service";
-import {HttpClientModule} from "@angular/common/http";
-import {RouterModule} from "@angular/router";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { TokenInterceptorService } from "./service/token-interceptor.service";
+import { HttpClientModule } from "@angular/common/http";
+import { RouterModule } from "@angular/router";
 import { PassagemComponent } from './components/views/passagem/passagem.component';
 import { VooComponent } from './components/views/voo/voo.component';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -59,6 +62,9 @@ import { MatNativeDateModule } from "@angular/material/core";
     MatDatepickerModule,
     MatNativeDateModule,
     // MatMomentDateModule
+    MatExpansionModule,
+    MatStepperModule,
+    MatTooltipModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass:TokenInterceptorService, multi: true}],
   bootstrap: [AppComponent]
