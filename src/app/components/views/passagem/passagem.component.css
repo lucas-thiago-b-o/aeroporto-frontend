@@ -19,3 +19,31 @@
         width: 90%;
     }
 }
+
+.container {
+    display: flex;
+    justify-content: space-evenly;
+    overflow-x: auto;
+    padding-left: 100px;
+}
+
+.block {
+    width: 500px;
+    margin: 20px;
+}
+
+.row {
+    display: flex;
+}
+
+.rectangle {
+    width: 120px;
+    height: 30px;
+    background-color: #3498db;
+    margin: 3px;
+    cursor: pointer;
+}
+
+.rectangle.selected {
+    background-color: #ffcc00;
+}

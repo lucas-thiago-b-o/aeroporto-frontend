@@ -1,8 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormControl} from "@angular/forms";
+import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {CidadeService} from "../../../service/cidade.service";
 import {VooService} from "../../../service/voo.service";
-import {CidadeDTO} from "../../../shared/models/models";
+import {CidadeDTO, ClasseDTO, VooDTO} from "../../../shared/models/models";
+import {ClasseService} from "../../../service/classe.service";
 
 @Component({
   selector: 'app-passagem',
@@ -16,14 +17,28 @@ export class PassagemComponent implements OnInit {
   myControlOrigem = new FormControl('');
   myControlDestino = new FormControl('');
   cidades: CidadeDTO[] = [];
+  voos: VooDTO[] = [];
+  classes: ClasseDTO[] = [];
   optionsOrigem: string[] = [];
   filteredOptionsOrigem: string[];
   optionsDestino: string[] = [];
   filteredOptionsDestino: string[];
 
+  firstFormGroup = this._formBuilder.group({
+    firstCtrl: ['', Validators.required],
+  });
+  secondFormGroup = this._formBuilder.group({
+    secondCtrl: ['', Validators.required],
+  });
+  isLinear = false;
+
+  blocks: number[][][] = [];
+
   constructor(
+      private _formBuilder: FormBuilder,
       public cidadeService: CidadeService,
-      public vooService: VooService
+      public vooService: VooService,
+      public classeService: ClasseService,
   ) {
     this.filteredOptionsOrigem = this.optionsOrigem.slice();
     this.filteredOptionsDestino = this.optionsDestino.slice();
@@ -38,6 +53,25 @@ export class PassagemComponent implements OnInit {
          this.optionsDestino.push(cidade.nome);
        });
       });
+
+      for (let i = 0; i < 5; i++) {
+        const block: number[][] = [];
+
+        if (i === 0) {
+          block.push(Array.from({length: 13}, (_, index) => index));
+        } else {
+          for (let j = 0; j < 4; j++) {
+            block.push(Array.from({length: 13}, (_, index) => 13 * i + j * 13 + index));
+          }
+        }
+
+      this.blocks.push(block);
+    }
+
+  }
+
+  toggleSelection(retangulo: any) {
+    console.log(retangulo);
   }
 
   filterOrigem(): void {
@@ -58,7 +92,16 @@ export class PassagemComponent implements OnInit {
     const idOrigem = this.cidades.filter(o => o.nome.toLowerCase().includes(this.myControlOrigem.value.toLowerCase()))[0].id;
     const idDestino = this.cidades.filter(o => o.nome.toLowerCase().includes(this.myControlDestino.value.toLowerCase()))[0].id;
     this.vooService.getAllVoos(idOrigem, idDestino).subscribe(voos => {
-        console.log(voos)
+      if (voos && voos.length > 0) {
+        this.voos = voos;
+
+        this.classeService.getAllClassesByVooId(this.voos[0].id).subscribe(classe => {
+          this.classes = classe;
+          console.log(this.classes);
+        });
+      } else {
+        alert('Não há voos disponíveis para estas localidades.');
+      }
     });
   }
 

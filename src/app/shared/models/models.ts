@@ -8,6 +8,7 @@ export interface AeroportoDTO {
 export interface AssentoDTO {
     id: number;
     nome: string;
+    passageiro: PassagemDTO;
 }
 
 export interface BagagemDTO {
@@ -25,7 +26,7 @@ export interface CidadeDTO {
 export interface ClasseDTO {
     id: number;
     nome: string;
-    assentos: AssentoDTO[];
+    assentos: AssentoDTO;
     voo: VooDTO;
 }
 
