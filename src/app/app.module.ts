@@ -31,6 +31,10 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
+import { PreenchimentoDadosComponent } from './components/views/preenchimento-dados/preenchimento-dados.component';
+import { PreenchimentoAssentoComponent } from './components/views/preenchimento-assento/preenchimento-assento.component';
+import {TextMaskModule} from "angular2-text-mask";
 
 @NgModule({
   declarations: [
@@ -42,6 +46,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     LoginComponent,
     PassagemComponent,
     VooComponent,
+    PreenchimentoDadosComponent,
+    PreenchimentoAssentoComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,7 +70,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     // MatMomentDateModule
     MatExpansionModule,
     MatStepperModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule,
+    TextMaskModule,
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass:TokenInterceptorService, multi: true}],
   bootstrap: [AppComponent]
