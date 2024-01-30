@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {CidadeService} from "../../../service/cidade.service";
 import {VooService} from "../../../service/voo.service";
@@ -24,15 +24,21 @@ export class PassagemComponent implements OnInit {
   optionsDestino: string[] = [];
   filteredOptionsDestino: string[];
 
-  firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
+  dadosFormGroup = this._formBuilder.group({
+    nome: ['', Validators.required],
+    cpf: ['', Validators.required],
+    rg: ['', Validators.required],
+    dataNascimento: ['', Validators.required],
+    telefone: ['', Validators.required],
+    contatoEmergencia: ['', Validators.required],
+    passaporte: ['', Validators.required],
   });
-  secondFormGroup = this._formBuilder.group({
+
+  assentoFormGroup = this._formBuilder.group({
     secondCtrl: ['', Validators.required],
   });
-  isLinear = false;
 
-  blocks: number[][][] = [];
+  seats = Array.from({ length: 676 }, (_, i) => i + 1);
 
   constructor(
       private _formBuilder: FormBuilder,
@@ -53,25 +59,6 @@ export class PassagemComponent implements OnInit {
          this.optionsDestino.push(cidade.nome);
        });
       });
-
-      for (let i = 0; i < 5; i++) {
-        const block: number[][] = [];
-
-        if (i === 0) {
-          block.push(Array.from({length: 13}, (_, index) => index));
-        } else {
-          for (let j = 0; j < 4; j++) {
-            block.push(Array.from({length: 13}, (_, index) => 13 * i + j * 13 + index));
-          }
-        }
-
-      this.blocks.push(block);
-    }
-
-  }
-
-  toggleSelection(retangulo: any) {
-    console.log(retangulo);
   }
 
   filterOrigem(): void {
@@ -97,7 +84,6 @@ export class PassagemComponent implements OnInit {
 
         this.classeService.getAllClassesByVooId(this.voos[0].id).subscribe(classe => {
           this.classes = classe;
-          console.log(this.classes);
         });
       } else {
         alert('Não há voos disponíveis para estas localidades.');

@@ -32,80 +32,64 @@
                 </mat-option>
             </mat-autocomplete>
         </mat-form-field>
-        <button type="submit" (click)="pesquisarPassagens()" mat-button>Procurar</button>
+        <button type="submit" (click)="pesquisarPassagens()" mat-raised-button color="primary">Procurar</button>
     </form>
 </mat-card>
-    <mat-accordion multi class="example-headers-align"
-                   *ngIf="voos && voos.length > 0">
-        <mat-expansion-panel class="home mat-elevation-z4"
-                             *ngFor="let voo of voos">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    <div style="font-size: 2em">
-                        <strong>{{voo.valor | currency:"BRL"}} - {{voo.dataHoraMarcado | date: 'dd/MM/yyyy hh:mm'}}</strong>
-                    </div>
-                </mat-panel-title>
-                <mat-panel-description>
+<mat-accordion multi class="example-headers-align"
+               *ngIf="voos && voos.length > 0">
+    <mat-expansion-panel class="home mat-elevation-z4"
+                         *ngFor="let voo of voos">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <div style="font-size: 2em">
+                    <strong>{{voo.valor | currency:"BRL"}} - {{voo.dataHoraMarcado | date: 'dd/MM/yyyy hh:mm'}}</strong>
+                </div>
+            </mat-panel-title>
+            <mat-panel-description>
+                <div>
                     <div>
-                        <div>
-                            <mat-icon style="color: red; vertical-align: middle">
-                                arrow_back
-                            </mat-icon>
-                            {{voo.aeroportoOrigem.nome}}
-                        </div>
-                        <div>
-                            <mat-icon style="color: green; vertical-align: middle">
-                                arrow_forward
-                            </mat-icon>
-                            {{voo.aeroportoDestino.nome}}
-                        </div>
+                        <mat-icon style="color: red; vertical-align: middle">
+                            arrow_back
+                        </mat-icon>
+                        {{voo.aeroportoOrigem.nome}}
                     </div>
-                </mat-panel-description>
-            </mat-expansion-panel-header>
-
-            <mat-stepper [linear]="isLinear" #stepper>
-                <mat-step [stepControl]="firstFormGroup" label="Preencha seus dados">
-                    <form [formGroup]="firstFormGroup">
-
-                        <div class="container">
-                           <div *ngFor="let block of blocks; let i = index"
-                                [ngStyle]="{'background-color': (i <= 2 ? 'lightgreen' : 'lemonchiffon')}">
-                              <div *ngFor="let block of blocks" class="block">
-                                <div *ngFor="let row of block" class="row">
-                                    <div *ngFor="let rectangle of row" class="rectangle"
-                                         matTooltip="Info about the action"
-                                         (click)="toggleSelection(rectangle)"></div>
-                                </div>
-                              </div>
-                           </div>
-                        </div>
-
-
-                        <div>
-                            <button mat-button matStepperNext>Next</button>
-                        </div>
-                    </form>
-                </mat-step>
-                <mat-step [stepControl]="secondFormGroup" label="Selecione os lugares">
-                    <form [formGroup]="secondFormGroup">
-                        <mat-form-field>
-                            <mat-label>Address</mat-label>
-                            <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
-                                   required>
-                        </mat-form-field>
-                        <div>
-                            <button mat-button matStepperPrevious>Back</button>
-                            <button mat-button matStepperNext>Next</button>
-                        </div>
-                    </form>
-                </mat-step>
-                <mat-step label="Revisar dados e confirmar">
-                    <p>You are now done.</p>
                     <div>
-                        <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button (click)="stepper.reset()">Reset</button>
+                        <mat-icon style="color: green; vertical-align: middle">
+                            arrow_forward
+                        </mat-icon>
+                        {{voo.aeroportoDestino.nome}}
                     </div>
-                </mat-step>
-            </mat-stepper>
-        </mat-expansion-panel>
-    </mat-accordion>
+                </div>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-stepper linear #stepper>
+            <mat-step [stepControl]="dadosFormGroup" label="Preencha seus dados">
+                <app-preenchimento-assento [classes]="classes"
+                                           [assentoFormGroup]="assentoFormGroup"></app-preenchimento-assento>
+            </mat-step>
+            <mat-step [stepControl]="assentoFormGroup" label="Escolha seu assento">
+                <app-preenchimento-dados [dadosFormGroup]="dadosFormGroup" [readable]="false"></app-preenchimento-dados>
+            </mat-step>
+
+            <mat-step label="Confirmação de compra">
+                <div>
+                    <app-preenchimento-dados [dadosFormGroup]="dadosFormGroup" [readable]="true"></app-preenchimento-dados>
+                </div>
+
+                <div>
+                    Assento
+                </div>
+
+                <div style="display: flex; justify-content: space-between">
+                    <div style="padding: 1em 1em 1em 0">
+                        <button mat-raised-button color="primary" matStepperPrevious>Voltar</button>
+                    </div>
+                    <div style="padding: 1em 1em 1em 0">
+                        <button mat-raised-button color="primary" matStepperNext>Avançar</button>
+                    </div>
+                </div>
+            </mat-step>
+        </mat-stepper>
+    </mat-expansion-panel>
+</mat-accordion>

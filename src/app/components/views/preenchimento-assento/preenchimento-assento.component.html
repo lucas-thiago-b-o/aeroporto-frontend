@@ -1,0 +1,20 @@
+<form [formGroup]="assentoFormGroup">
+    <mat-card class="plane">
+        <div *ngFor="let cadeira of classes" [ngClass]="!cadeira.assentos.passageiro ? 'seat' : 'seat occupied'"
+             matTooltip="{{cadeira.assentos.passageiro ? null : cadeira.nome}}"
+             [style.background-color]="cadeira.assentos.passageiro ? '#ff6961' :
+                                 (cadeira.nome === 'Primeira Classe' ? 'lightgreen' : 'lemonchiffon')"
+             (click)="cadeiraSelecionada($event, cadeira)">
+                    {{cadeira.assentos.nome}}
+        </div>
+    </mat-card>
+
+    <div style="display: flex; justify-content: space-between">
+        <div style="padding: 1em 1em 1em 0">
+            <button mat-raised-button color="primary" matStepperPrevious>Voltar</button>
+        </div>
+        <div style="padding: 1em 1em 1em 0">
+            <button mat-raised-button color="primary" matStepperNext>Avançar</button>
+        </div>
+    </div>
+</form>
