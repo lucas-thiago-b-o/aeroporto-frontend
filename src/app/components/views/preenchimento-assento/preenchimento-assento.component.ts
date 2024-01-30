@@ -28,10 +28,12 @@ export class PreenchimentoAssentoComponent implements OnInit {
 
    if (this.assentosSelecionados.length <= 5) {
      const cadeira: HTMLInputElement = evento.target;
-     if (cadeira.style.backgroundColor === 'lightgreen') {
+     if (cadeira.style.backgroundColor === 'lightgreen' || cadeira.style.backgroundColor === 'lemonchiffon') {
        cadeira.style.backgroundColor = 'cornflowerblue';
-     } else {
+     } else if (cadeira.style.backgroundColor === 'cornflowerblue' && classe.nome === 'Primeira Classe') {
        cadeira.style.backgroundColor = 'lightgreen'
+     } else if (cadeira.style.backgroundColor === 'cornflowerblue' && classe.nome === 'Classe Econômica') {
+         cadeira.style.backgroundColor = 'lemonchiffon'
      }
    } else {
      this.assentosSelecionados.pop();
