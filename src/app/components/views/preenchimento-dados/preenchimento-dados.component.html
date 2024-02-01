@@ -2,52 +2,61 @@
     <mat-card>
         <mat-form-field>
             <mat-label>Nome Completo</mat-label>
-            <input matInput formControlName="nome" [readonly]="readable" required>
+            <input matInput formControlName="nome" [value]="dadosFormGroup.controls.nome.value" [readonly]="readable" required>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Data de Nascimento</mat-label>
-            <input matInput formControlName="dataNascimento" [readonly]="readable" required>
+            <input [textMask]="{mask: maskData}" matInput formControlName="dataNascimento"
+                   [readonly]="readable" [value]="dadosFormGroup.controls.dataNascimento.value" required>
         </mat-form-field><br>
 
         <mat-form-field>
             <mat-label>RG</mat-label>
-            <input [textMask]="{mask: maskRG}" matInput formControlName="rg" [readonly]="readable" required>
+            <input [textMask]="{mask: maskRG}" matInput formControlName="rg" [readonly]="readable"
+                   [value]="dadosFormGroup.controls.rg.value" required>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>CPF</mat-label>
-            <input matInput [textMask]="{mask: maskCPF}" formControlName="cpf" [readonly]="readable" required>
+            <input matInput [textMask]="{mask: maskCPF}" formControlName="cpf" [readonly]="readable"
+                   [value]="dadosFormGroup.controls.cpf.value" required>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Telefone</mat-label>
-            <input matInput [textMask]="{mask: maskTelefone}" formControlName="telefone" [readonly]="readable" required>
+            <input matInput [textMask]="{mask: maskTelefone}" formControlName="telefone" [readonly]="readable"
+                   [value]="dadosFormGroup.controls.telefone.value" required>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Contato de Emergência</mat-label>
-            <input matInput [textMask]="{mask: maskTelefone}" formControlName="contatoEmergencia" [readonly]="readable" required>
+            <input matInput [textMask]="{mask: maskTelefone}" formControlName="contatoEmergencia" [readonly]="readable"
+                   [value]="dadosFormGroup.controls.contatoEmergencia.value" required>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Passaporte</mat-label>
-            <input matInput formControlName="passaporte" [readonly]="readable" required>
+            <input matInput formControlName="passaporte" [readonly]="readable"
+                   [value]="dadosFormGroup.controls.passaporte.value" required>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Bagagens</mat-label>
-            <mat-select required>
+            <mat-select [value]="dadosFormGroup.controls.bagagens.value" [disabled]="readable"
+                        (selectionChange)="selecionaQuantBagagem($event)" required>
                 <mat-option [value]="1">1</mat-option>
                 <mat-option [value]="2">2</mat-option>
                 <mat-option [value]="3">3</mat-option>
                 <mat-option [value]="4">4</mat-option>
                 <mat-option [value]="5">5</mat-option>
             </mat-select>
+            <mat-hint><i>Atenção! Levando mais de uma bagagem acarreta em 10% no valor da passagem e a mesma será despachada automaticamente</i></mat-hint>
         </mat-form-field>
     </mat-card>
 
-    <div style="padding: 1em 1em 1em 0">
-        <button mat-raised-button color="primary" matStepperNext>Avançar</button>
+    <div style="padding: 1em 0 1em 1em; float: right">
+        <button mat-raised-button color="primary" *ngIf="!readable"
+                matStepperNext (click)="emiteValores()">Avançar</button>
     </div>
 </form>

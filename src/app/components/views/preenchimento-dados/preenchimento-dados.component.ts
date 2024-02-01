@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-preenchimento-dados',
@@ -10,13 +10,24 @@ export class PreenchimentoDadosComponent implements OnInit {
   @Input() readable: any;
   @Input() dadosFormGroup: any;
 
+  @Output() preencheDados = new EventEmitter;
+
   maskRG = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/];
   maskCPF = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
+  maskData = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   maskTelefone = ['(', /[1-9]/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  emiteValores() {
+    this.preencheDados.emit(this.dadosFormGroup);
+  }
+
+  selecionaQuantBagagem(event: any) {
+    this.dadosFormGroup.controls.bagagens.setValue(event.value);
   }
 
 }

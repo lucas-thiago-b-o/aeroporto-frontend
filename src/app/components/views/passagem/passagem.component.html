@@ -42,7 +42,7 @@
         <mat-expansion-panel-header>
             <mat-panel-title>
                 <div style="font-size: 2em">
-                    <strong>{{voo.valor | currency:"BRL"}} - {{voo.dataHoraMarcado | date: 'dd/MM/yyyy hh:mm'}}</strong>
+                    <strong>{{voo.dataHoraMarcado | date: 'dd/MM/yyyy HH:mm'}}</strong>
                 </div>
             </mat-panel-title>
             <mat-panel-description>
@@ -65,11 +65,12 @@
 
         <mat-stepper linear #stepper>
             <mat-step [stepControl]="dadosFormGroup" label="Preencha seus dados">
-                <app-preenchimento-assento [classes]="classes"
-                                           [assentoFormGroup]="assentoFormGroup"></app-preenchimento-assento>
+                <app-preenchimento-dados [readable]="false" (preencheDados)="preencheDados($event)"
+                                          [dadosFormGroup]="dadosFormGroup" ></app-preenchimento-dados>
             </mat-step>
             <mat-step [stepControl]="assentoFormGroup" label="Escolha seu assento">
-                <app-preenchimento-dados [dadosFormGroup]="dadosFormGroup" [readable]="false"></app-preenchimento-dados>
+                <app-preenchimento-assento [classes]="classes" (preencheAssento)="preencheAssento($event)"
+                                           [assentoFormGroup]="assentoFormGroup"></app-preenchimento-assento>
             </mat-step>
 
             <mat-step label="Confirmação de compra">
@@ -77,8 +78,22 @@
                     <app-preenchimento-dados [dadosFormGroup]="dadosFormGroup" [readable]="true"></app-preenchimento-dados>
                 </div>
 
+                <br>
+
                 <div>
-                    Assento
+                    <mat-card>
+                        <mat-list role="list">
+                            <mat-list-item role="listitem">Classe: {{retornaClasse(assentoFormGroup.controls['assento'].value)}}</mat-list-item>
+                            <mat-list-item role="listitem">Assento: {{retornaAssento(assentoFormGroup.controls['assento'].value)}}</mat-list-item>
+                            <mat-list-item role="listitem">Valor: {{
+                                (dadosFormGroup.controls['bagagens'].value > 1 ?
+                                acrescentaDezPorcento(assentoFormGroup.controls['assento'].value)
+                                : retornaValor(assentoFormGroup.controls['assento'].value)) | currency:'BRL'}}
+                                {{dadosFormGroup.controls['bagagens'].value > 1 ? '*' : null}}
+                            </mat-list-item>
+                            <i *ngIf="dadosFormGroup.controls['bagagens'].value > 1">Acrescentado 10% no valor pelo despacho das bagagens</i>
+                        </mat-list>
+                    </mat-card>
                 </div>
 
                 <div style="display: flex; justify-content: space-between">
@@ -86,7 +101,8 @@
                         <button mat-raised-button color="primary" matStepperPrevious>Voltar</button>
                     </div>
                     <div style="padding: 1em 1em 1em 0">
-                        <button mat-raised-button color="primary" matStepperNext>Avançar</button>
+                        <button mat-raised-button color="primary" matStepperNext
+                                (click)="comprarPassagem(voo)">Realizar Compra</button>
                     </div>
                 </div>
             </mat-step>

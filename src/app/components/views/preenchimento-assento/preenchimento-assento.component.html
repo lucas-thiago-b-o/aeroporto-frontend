@@ -1,8 +1,8 @@
 <form [formGroup]="assentoFormGroup">
     <mat-card class="plane">
-        <div *ngFor="let cadeira of classes" [ngClass]="!cadeira.assentos.passageiro ? 'seat' : 'seat occupied'"
-             matTooltip="{{cadeira.assentos.passageiro ? null : cadeira.nome}}"
-             [style.background-color]="cadeira.assentos.passageiro ? '#ff6961' :
+        <div *ngFor="let cadeira of classes" [ngClass]="!cadeira.passageiro ? 'seat' : 'seat occupied'"
+             matTooltip="{{cadeira.passageiro ? null : (cadeira.nome + ' ' + (cadeira.valor | currency:'BRL'))}}"
+             [style.background-color]="cadeira.passageiro ? '#ff6961' :
                                  (cadeira.nome === 'Primeira Classe' ? 'lightgreen' : 'lemonchiffon')"
              (click)="cadeiraSelecionada($event, cadeira)">
                     {{cadeira.assentos.nome}}

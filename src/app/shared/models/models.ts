@@ -8,7 +8,6 @@ export interface AeroportoDTO {
 export interface AssentoDTO {
     id: number;
     nome: string;
-    passageiro: PassageiroDTO;
 }
 
 export interface BagagemDTO {
@@ -27,17 +26,9 @@ export interface ClasseDTO {
     id: number;
     nome: string;
     assentos: AssentoDTO;
+    valor: number;
     voo: VooDTO;
-}
-
-export interface ComprarPassagemDTO {
-    passagemDTO: PassagemDTO;
-    passageirosAssentoDTO: PassageiroAssentoDTO[];
-}
-
-export interface PassageiroAssentoDTO {
-    passageiroDTO: PassageiroDTO;
-    classeId: number;
+    passageiro: PassageiroDTO;
 }
 
 export interface PassageiroDTO {
@@ -46,7 +37,7 @@ export interface PassageiroDTO {
     cpf: number;
     rg: number;
     passaporte: number;
-    dataNascimentodataNascimento: Date;
+    dataNascimento: Date;
     telefone: number;
     contatoEmergencia: number;
     bagagens: BagagemDTO[];
@@ -71,7 +62,6 @@ export interface VooDTO {
     id: number;
     nome: string;
     status: string;
-    valor: number;
     dataHoraMarcado: Date;
     dataHoraPartida: Date;
     dataHoraPrevisao: Date;

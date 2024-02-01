@@ -1,9 +1,12 @@
-import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {CidadeService} from "../../../service/cidade.service";
 import {VooService} from "../../../service/voo.service";
 import {CidadeDTO, ClasseDTO, VooDTO} from "../../../shared/models/models";
 import {ClasseService} from "../../../service/classe.service";
+import {AuthService} from "../../../service/auth.service";
+import {PassagemService} from "../../../service/passagem.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-passagem',
@@ -24,7 +27,7 @@ export class PassagemComponent implements OnInit {
   optionsDestino: string[] = [];
   filteredOptionsDestino: string[];
 
-  dadosFormGroup = this._formBuilder.group({
+  dadosFormGroup = this.formBuilder.group({
     nome: ['', Validators.required],
     cpf: ['', Validators.required],
     rg: ['', Validators.required],
@@ -32,19 +35,31 @@ export class PassagemComponent implements OnInit {
     telefone: ['', Validators.required],
     contatoEmergencia: ['', Validators.required],
     passaporte: ['', Validators.required],
+    bagagens: ['', Validators.required],
   });
 
-  assentoFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
+  assentoFormGroup = this.formBuilder.group({
+    assento: ['', Validators.required],
   });
 
   seats = Array.from({ length: 676 }, (_, i) => i + 1);
 
+  preencheDados(event: any) {
+    this.dadosFormGroup.patchValue(event);
+  }
+
+  preencheAssento(event: any) {
+    this.assentoFormGroup.patchValue(event);
+  }
+
   constructor(
-      private _formBuilder: FormBuilder,
+      private formBuilder: FormBuilder,
       public cidadeService: CidadeService,
       public vooService: VooService,
       public classeService: ClasseService,
+      public passagemService: PassagemService,
+      public authService: AuthService,
+      public route: Router
   ) {
     this.filteredOptionsOrigem = this.optionsOrigem.slice();
     this.filteredOptionsDestino = this.optionsDestino.slice();
@@ -59,6 +74,15 @@ export class PassagemComponent implements OnInit {
          this.optionsDestino.push(cidade.nome);
        });
       });
+  }
+
+  acrescentaDezPorcento(value: any) {
+    const valor = this.retornaValor(value);
+    return  valor + (valor * 0.10);
+  }
+
+  retornaValor(valor: any) {
+    return valor ? valor.valor : null;
   }
 
   filterOrigem(): void {
@@ -89,6 +113,53 @@ export class PassagemComponent implements OnInit {
         alert('Não há voos disponíveis para estas localidades.');
       }
     });
+  }
+
+  comprarPassagem(voo: VooDTO) {
+    const bagagens = [];
+    for(let i = 1; i < this.dadosFormGroup.controls['bagagens'].value; i++) {
+      bagagens.push({
+        id: null,
+        numeroIdentificacao: null,
+        isDespachada: this.dadosFormGroup.controls['bagagens'].value > 1
+      });
+    }
+
+    this.assentoFormGroup.controls['assento'].value.passageiro = {
+      id: null,
+      nomeCompleto: this.dadosFormGroup.controls['nome'].value,
+      cpf: this.dadosFormGroup.controls['cpf'].value,
+      rg: this.dadosFormGroup.controls['rg'].value,
+      passaporte: this.dadosFormGroup.controls['passaporte'].value,
+      dataNascimento: new Date(this.dadosFormGroup.controls['dataNascimento'].value.split("/").reverse().join(", ")),
+      telefone: this.dadosFormGroup.controls['telefone'].value,
+      contatoEmergencia: this.dadosFormGroup.controls['contatoEmergencia'].value,
+      bagagens: bagagens
+    };
+
+    const passagem = {
+      id: null,
+      portaoEmbarque: null,
+      uuidUsuario: this.authService.getUuid(),
+      dataHoraVoo: voo.dataHoraMarcado,
+      valor: this.assentoFormGroup.controls['assento'].value.valor,
+      numeroIdentificacao: null,
+      classe: this.assentoFormGroup.controls['assento'].value
+    };
+
+    this.passagemService.savePassagem(passagem).subscribe(n => {
+      alert(n);
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+  retornaAssento(assento: any) {
+    return assento ? assento.assentos.nome : null;
+  }
+
+  retornaClasse(classe: any) {
+    return classe ? classe.nome : null;
   }
 
 }
