@@ -35,6 +35,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { PreenchimentoDadosComponent } from './components/views/preenchimento-dados/preenchimento-dados.component';
 import { PreenchimentoAssentoComponent } from './components/views/preenchimento-assento/preenchimento-assento.component';
 import {TextMaskModule} from "angular2-text-mask";
+import { MinhasPassagensComponent } from './components/views/minhas-passagens/minhas-passagens.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import {TextMaskModule} from "angular2-text-mask";
     VooComponent,
     PreenchimentoDadosComponent,
     PreenchimentoAssentoComponent,
+    MinhasPassagensComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,6 +75,7 @@ import {TextMaskModule} from "angular2-text-mask";
     MatTooltipModule,
     MatSelectModule,
     TextMaskModule,
+    MatListModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass:TokenInterceptorService, multi: true}],
   bootstrap: [AppComponent]

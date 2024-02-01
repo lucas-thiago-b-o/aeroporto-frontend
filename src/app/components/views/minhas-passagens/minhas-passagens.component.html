@@ -1,0 +1,61 @@
+<mat-card class="home mat-elevation-z4" *ngFor="let passagem of passagens; let i = index" [id]="'card' + i" #card>
+        <mat-card-content>
+            <mat-accordion class="example-headers-align" multi>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{passagem.numeroIdentificacao}}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{passagem.classe.voo.nome}}
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <div style="display: flex; justify-content: space-evenly">
+                        <div>
+                            <mat-icon style="color: red; vertical-align: middle">arrow_back</mat-icon>
+                            <mat-icon style="vertical-align: middle">flight_takeoff</mat-icon>
+                            {{passagem.classe.voo.aeroportoOrigem.nome}}
+                        </div>
+                        <div>
+                            <mat-icon style="color: green; vertical-align: middle">arrow_forward</mat-icon>
+                            <mat-icon style="vertical-align: middle">flight_land</mat-icon>
+                            {{passagem.classe.voo.aeroportoDestino.nome}}
+                        </div>
+                    </div>
+
+                    <div>
+                        <h1>
+                            {{passagem.classe.voo.aeroportoOrigem.cidade.nome + ' - ' + passagem.classe.voo.aeroportoDestino.cidade.nome}}
+                        </h1>
+                        <h3>
+                            {{passagem.classe.voo.dataHoraMarcado | date: 'dd/MM/yyyy HH:mm'}}
+                        </h3>
+                    </div>
+
+                    <div>
+                        <h3>
+                            Portão de embarque: {{passagem.portaoEmbarque}}
+                        </h3>
+                    </div>
+
+                    <mat-list role="list">
+                        <mat-list-item role="listitem">Passageiro: {{passagem.classe.passageiro.nomeCompleto}} - Documento: {{passagem.classe.passageiro.cpf}}</mat-list-item>
+                        <mat-list-item role="listitem">Classe: {{passagem.classe.nome}}</mat-list-item>
+                        <mat-list-item role="listitem">Assento: {{passagem.classe.assentos.nome}}</mat-list-item>
+                        <mat-list-item role="listitem">Valor pago: {{passagem.valor | currency:'BRL'}}</mat-list-item>
+                        <mat-list-item role="listitem">
+                            Bagagens: {{passagem.classe.passageiro.bagagens.length}}
+                            <i *ngIf="passagem.classe.passageiro.bagagens.length > 1"> - Bagagens despachadas</i>
+                        </mat-list-item>
+                    </mat-list>
+
+                    <div class="acoes">
+                        <button mat-raised-button (click)="htmltoPDF('card' + i,
+                                                                     passagem.classe.voo.dataHoraMarcado)">Baixar Voucher</button>
+                        <button mat-raised-button color="warn">Cancelar Passagem</button>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </mat-card-content>
+</mat-card>
