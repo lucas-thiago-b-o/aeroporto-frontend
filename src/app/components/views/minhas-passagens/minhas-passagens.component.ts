@@ -40,7 +40,7 @@ export class MinhasPassagensComponent implements OnInit {
 
         var imgData = canvas.toDataURL("image/png", 1.0);
         pdf.addImage(imgData, -19, 0, canvas.width, canvas.height);
-        pdf.save('converteddoc.pdf');
+        pdf.save('Voucher.pdf');
       });
    } else {
       alert('Não é mais permitido baixar o voucher, pois já tem menos ou 5 horas em comparação a data marcada do voo.')

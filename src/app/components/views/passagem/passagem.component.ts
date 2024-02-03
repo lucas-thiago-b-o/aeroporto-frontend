@@ -117,7 +117,7 @@ export class PassagemComponent implements OnInit {
 
   comprarPassagem(voo: VooDTO) {
     const bagagens = [];
-    for(let i = 1; i < this.dadosFormGroup.controls['bagagens'].value; i++) {
+    for(let i = 1; i <= this.dadosFormGroup.controls['bagagens'].value; i++) {
       bagagens.push({
         id: null,
         numeroIdentificacao: null,
