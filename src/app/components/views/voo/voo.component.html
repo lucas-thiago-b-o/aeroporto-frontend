@@ -1,1 +1,55 @@
-<p>voo works!</p>
+<mat-card class="home mat-elevation-z4" style="display: flex; justify-content: center" *ngIf="!voos || voos.length <= 0">
+    <mat-card-subtitle class="subtitle">Nenhum voo disponivel no momento</mat-card-subtitle>
+</mat-card>
+<mat-card class="home mat-elevation-z4" *ngFor="let voo of voos; let i = index" [id]="'card' + i" #card>
+    <mat-card-content>
+        <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{voo.dataHoraMarcado | date: 'dd/MM/yyyy HH:mm'}}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        {{voo.nome}}
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div style="display: flex; justify-content: space-evenly">
+                    <div>
+                        <mat-icon style="color: red; vertical-align: middle">arrow_back</mat-icon>
+                        <mat-icon style="vertical-align: middle">flight_takeoff</mat-icon>
+                        {{voo.aeroportoOrigem.nome}}
+                    </div>
+                    <div>
+                        <mat-icon style="color: green; vertical-align: middle">arrow_forward</mat-icon>
+                        <mat-icon style="vertical-align: middle">flight_land</mat-icon>
+                        {{voo.aeroportoDestino.nome}}
+                    </div>
+                </div>
+
+                <div>
+                    <h3>
+                        Previsão de chegada: {{voo.dataHoraPrevisao | date: 'dd/MM/yyyy HH:mm'}}
+                    </h3>
+                </div>
+
+                <div>
+                    <h3>
+                        Portão de embarque: {{voo.portaoEmbarque}}
+                    </h3>
+                </div>
+
+                <mat-list role="list">
+                    <mat-list-item role="listitem">Passageiros: {{quantPassageiros[i]}}</mat-list-item>
+                    <mat-list-item role="listitem">Classe: 676 (338 de Primeira Classe e 338 de Classe Econômica)</mat-list-item>
+                    <mat-list-item role="listitem">Assento: 676</mat-list-item>
+                    <mat-list-item role="listitem">Status: {{voo.status}}</mat-list-item>
+                </mat-list>
+
+                <div class="acoes">
+                    <button mat-raised-button color="warn">Cancelar Voo</button>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-card-content>
+</mat-card>

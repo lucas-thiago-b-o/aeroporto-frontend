@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {VooService} from "../../../service/voo.service";
+import {VooDTO} from "../../../shared/models/models";
+import {ClasseService} from "../../../service/classe.service";
 
 @Component({
   selector: 'app-voo',
@@ -7,9 +10,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VooComponent implements OnInit {
 
-  constructor() { }
+  voos: VooDTO[] = [];
+  quantPassageiros: number[] = [];
+
+  constructor(
+      private vooService: VooService,
+      private classeService: ClasseService,
+  ) { }
 
   ngOnInit(): void {
+    this.vooService.getAllVoos().subscribe(v => {
+      this.voos = v;
+    }, (error) => {
+      console.log(error);
+    }, () => {
+      this.voos.forEach(async v => {
+        const passageiros = await this.classeService.getQuantPassageirosByVoo(v.id).toPromise();
+        this.quantPassageiros.push(<number>passageiros);
+      });
+    });
   }
 
 }
