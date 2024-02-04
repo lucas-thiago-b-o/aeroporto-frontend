@@ -21,6 +21,14 @@ export class PassagemService {
     return this.http.post<PassagemDTO>(environment.baseUrl.concat(this.mappingPadrao).concat("/passagem"), passagem, requestOptions);
   }
 
+  cancelarPassagem(passagem: any): Observable<any> {
+    const requestOptions: Object = {
+      responseType: 'text'
+    }
+
+    return this.http.put<PassagemDTO>(environment.baseUrl.concat(this.mappingPadrao).concat("/passagem"), passagem, requestOptions);
+  }
+
   getPassagemByUsuario(uuid: string): Observable<PassagemDTO[]> {
     return this.http.get<PassagemDTO[]>(environment.baseUrl.concat(this.mappingPadrao).concat("/passagem/").concat(String(uuid)));
   }
