@@ -62,7 +62,7 @@ export class MinhasPassagensComponent implements OnInit {
       this.passagemService.cancelarPassagem(passagem).subscribe(n => {
          alert(n);
       }, (error) => {
-          console.log(error);
+          console.log(error.error.text);
       }, () => {
           window.location.reload();
       });
