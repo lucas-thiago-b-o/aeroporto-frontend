@@ -13,6 +13,10 @@ export class ClasseService {
 
   constructor(private http: HttpClient) { }
 
+  getQuantPassageirosByVoo(idVoo: number): Observable<number> {
+    return this.http.get<number>(environment.baseUrl.concat(this.mappingPadrao).concat("/passageiros/").concat(String(idVoo)));
+  }
+
   getAllClassesByVooId(idVoo: number): Observable<ClasseDTO[]> {
     return this.http.get<ClasseDTO[]>(environment.baseUrl.concat(this.mappingPadrao).concat("/classe/voo/").concat(String(idVoo)));
   }
