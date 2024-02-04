@@ -8,31 +8,36 @@
         <mat-form-field>
             <mat-label>Data de Nascimento</mat-label>
             <input [textMask]="{mask: maskData}" matInput formControlName="dataNascimento"
-                   [readonly]="readable" [value]="dadosFormGroup.controls.dataNascimento.value" required>
+                   #dataNascimento (blur)="checaDataLength(dataNascimento.value)" required
+                   [readonly]="readable" [value]="dadosFormGroup.controls.dataNascimento.value">
         </mat-form-field><br>
 
         <mat-form-field>
             <mat-label>RG</mat-label>
-            <input [textMask]="{mask: maskRG}" matInput formControlName="rg" [readonly]="readable"
-                   [value]="dadosFormGroup.controls.rg.value" required>
+            <input [textMask]="{mask: maskRG}" matInput formControlName="rg"
+                   #rg (blur)="checaRGLength(rg.value)" required
+                   [readonly]="readable" [value]="dadosFormGroup.controls.rg.value">
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>CPF</mat-label>
-            <input matInput [textMask]="{mask: maskCPF}" formControlName="cpf" [readonly]="readable"
-                   [value]="dadosFormGroup.controls.cpf.value" required>
+            <input matInput [textMask]="{mask: maskCPF}" formControlName="cpf"
+                   #cpf (blur)="checaCPFLength(cpf.value)" required
+                   [readonly]="readable" [value]="dadosFormGroup.controls.cpf.value">
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Telefone</mat-label>
-            <input matInput [textMask]="{mask: maskTelefone}" formControlName="telefone" [readonly]="readable"
-                   [value]="dadosFormGroup.controls.telefone.value" required>
+            <input matInput [textMask]="{mask: maskTelefone}" formControlName="telefone"
+                   [readonly]="readable" [value]="dadosFormGroup.controls.telefone.value"
+                   #telefone (blur)="checaTelefoneLength(telefone.value)" required>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Contato de Emergência</mat-label>
-            <input matInput [textMask]="{mask: maskTelefone}" formControlName="contatoEmergencia" [readonly]="readable"
-                   [value]="dadosFormGroup.controls.contatoEmergencia.value" required>
+            <input matInput [textMask]="{mask: maskTelefone}" formControlName="contatoEmergencia"
+                   [readonly]="readable" [value]="dadosFormGroup.controls.contatoEmergencia.value"
+                   #contatoEmergencia (blur)="checaContatoEmergenciaLength(contatoEmergencia.value)" required>
         </mat-form-field>
 
         <mat-form-field>
