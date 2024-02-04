@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {VooDTO} from "../shared/models/models";
+import {PassagemDTO, VooDTO} from "../shared/models/models";
 import {environment} from "../../environments/environment";
 
 @Injectable({
@@ -22,7 +22,11 @@ export class VooService {
            .concat(`/voo/aeroporto/cidade_origem/${idOrigem}/cidade_destino/${idDestino}`));
   }
 
-  cancelarVoo() {
+  cancelarVoo(idVoo: number): Observable<any> {
+    const requestOptions: Object = {
+      responseType: 'text'
+    }
 
+    return this.http.put<any>(environment.baseUrl.concat(this.mappingPadrao).concat(`/voo/cancelar/${idVoo}`), null, requestOptions);
   }
 }

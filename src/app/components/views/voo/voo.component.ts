@@ -22,7 +22,7 @@ export class VooComponent implements OnInit {
     this.vooService.getAllVoos().subscribe(v => {
       this.voos = v;
     }, (error) => {
-      console.log(error);
+      console.log(error.error.text);
     }, () => {
       this.voos.forEach(async v => {
         const passageiros = await this.classeService.getQuantPassageirosByVoo(v.id).toPromise();
@@ -31,4 +31,11 @@ export class VooComponent implements OnInit {
     });
   }
 
+  cancelarVoo(id: number) {
+    this.vooService.cancelarVoo(id).subscribe(s => {
+      alert(s);
+    }, (error) => {
+      console.log(error.error.text);
+    });
+  }
 }
