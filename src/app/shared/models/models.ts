@@ -63,6 +63,7 @@ export interface VooDTO {
     id: number;
     nome: string;
     status: string;
+    portaoEmbarque: string;
     dataHoraMarcado: Date;
     dataHoraPartida: Date;
     dataHoraPrevisao: Date;
