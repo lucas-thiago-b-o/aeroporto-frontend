@@ -47,6 +47,7 @@ export interface PassagemDTO {
     id: number;
     portaoEmbarque: string;
     uuidUsuario: string;
+    status: string;
     dataHoraVoo: Date;
     valor: number;
     numeroIdentificacao: string;
