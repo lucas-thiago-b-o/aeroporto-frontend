@@ -43,20 +43,24 @@
                     </div>
 
                     <mat-list role="list">
-                        <mat-list-item role="listitem">Passageiro: {{passagem.classe.passageiro.nomeCompleto}} - Documento: {{passagem.classe.passageiro.cpf}}</mat-list-item>
+                        <mat-list-item role="listitem" *ngIf="passagem.classe.passageiro">
+                            Passageiro: {{passagem.classe.passageiro.nomeCompleto}} - Documento: {{passagem.classe.passageiro.cpf}}
+                        </mat-list-item>
                         <mat-list-item role="listitem">Classe: {{passagem.classe.nome}}</mat-list-item>
                         <mat-list-item role="listitem">Assento: {{passagem.classe.assentos.nome}}</mat-list-item>
                         <mat-list-item role="listitem">Valor pago: {{passagem.valor | currency:'BRL'}}</mat-list-item>
-                        <mat-list-item role="listitem">
+                        <mat-list-item role="listitem" *ngIf="passagem.classe.passageiro">
                             Bagagens: {{passagem.classe.passageiro.bagagens.length}}
                             <i *ngIf="passagem.classe.passageiro.bagagens.length > 1"> - Bagagens despachadas</i>
                         </mat-list-item>
+                        <mat-list-item role="listitem">Status: {{passagem.status}}</mat-list-item>
                     </mat-list>
 
                     <div class="acoes">
-                        <button mat-raised-button (click)="htmltoPDF('card' + i,
-                                                                     passagem.classe.voo.dataHoraMarcado)">Baixar Voucher</button>
-                        <button mat-raised-button color="warn">Cancelar Passagem</button>
+                        <button mat-raised-button *ngIf="passagem.status !== 'Cancelada'"
+                                                  (click)="htmltoPDF('card' + i, passagem.classe.voo.dataHoraMarcado)">Baixar Voucher</button>
+                        <button mat-raised-button color="warn" *ngIf="passagem.status !== 'Cancelada'"
+                                                               (click)="cancelarPassagem(passagem)">Cancelar Passagem</button>
                     </div>
                 </mat-expansion-panel>
             </mat-accordion>

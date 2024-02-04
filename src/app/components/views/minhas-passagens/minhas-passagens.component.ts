@@ -22,7 +22,6 @@ export class MinhasPassagensComponent implements OnInit {
   ngOnInit(): void {
     const uuid = this.authService.getUuid();
     this.passagemService.getPassagemByUsuario(uuid).subscribe(passagens => {
-      console.log(passagens);
       this.passagens = passagens;
     });
   }
@@ -36,7 +35,7 @@ export class MinhasPassagensComponent implements OnInit {
         scale: 2,
       }).then(canvas => {
 
-        var pdf = new jsPDF('l', 'px', [canvas.width - 259.5, canvas.height - 225]);
+        var pdf = new jsPDF('l', 'px', [canvas.width - 259.5, canvas.height - 312]);
 
         var imgData = canvas.toDataURL("image/png", 1.0);
         pdf.addImage(imgData, -19, 0, canvas.width, canvas.height);
@@ -48,20 +47,25 @@ export class MinhasPassagensComponent implements OnInit {
   }
 
   verificarDiferencaDeHoras(dataComparacao: any) {
-      // Obtém a data e hora atual
       const dataAtual: any = new Date();
 
-      // Converte a data de comparação para o objeto Date
       const dataComparacaoObj: any = new Date(dataComparacao);
 
-      // Calcula a diferença em milissegundos
       const diferencaEmMilissegundos = Math.abs(dataAtual - dataComparacaoObj);
 
-      // Converte a diferença para horas
       const diferencaEmHoras = diferencaEmMilissegundos / (1000 * 60 * 60);
 
-      // Verifica se a diferença é de 5 horas ou menos
       return diferencaEmHoras <= 5;
+  }
+
+  cancelarPassagem(passagem: PassagemDTO) {
+      this.passagemService.cancelarPassagem(passagem).subscribe(n => {
+         alert(n);
+      }, (error) => {
+          console.log(error);
+      }, () => {
+          window.location.reload();
+      });
   }
 
 }
