@@ -125,6 +125,17 @@ export class PassagemComponent implements OnInit {
       });
     }
 
+    this.dadosFormGroup.controls['telefone'].setValue(
+        this.processarNumeroTelefone(this.dadosFormGroup.controls['telefone'].value)
+    );
+
+    this.dadosFormGroup.controls['contatoEmergencia'].setValue(
+        this.processarNumeroTelefone(this.dadosFormGroup.controls['contatoEmergencia'].value)
+    )
+
+    console.log(this.dadosFormGroup.controls['telefone'].value);
+    console.log(this.dadosFormGroup.controls['contatoEmergencia'].value);
+
     this.assentoFormGroup.controls['assento'].value.passageiro = {
       id: null,
       nomeCompleto: this.dadosFormGroup.controls['nome'].value,
@@ -151,7 +162,15 @@ export class PassagemComponent implements OnInit {
       alert(n);
     }, (error) => {
       console.log(error);
+    }, () => {
+      window.location.reload();
     });
+  }
+
+  processarNumeroTelefone(numero: any) {
+    var numeroLimpo = numero.replace(/\D/g, '');
+
+    return numeroLimpo.length === 10 ? '(' + numeroLimpo.substring(0, 2) + ') ' + numeroLimpo.substring(2, 6) + '-' + numeroLimpo.substring(6) : numero;
   }
 
   retornaAssento(assento: any) {
