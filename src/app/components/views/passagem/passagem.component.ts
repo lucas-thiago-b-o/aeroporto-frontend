@@ -102,7 +102,7 @@ export class PassagemComponent implements OnInit {
   pesquisarPassagens() {
     const idOrigem = this.cidades.filter(o => o.nome.toLowerCase().includes(this.myControlOrigem.value.toLowerCase()))[0].id;
     const idDestino = this.cidades.filter(o => o.nome.toLowerCase().includes(this.myControlDestino.value.toLowerCase()))[0].id;
-    this.vooService.getAllVoos(idOrigem, idDestino).subscribe(voos => {
+    this.vooService.getAllVoosByCidades(idOrigem, idDestino).subscribe(voos => {
       if (voos && voos.length > 0) {
         this.voos = voos;
 
@@ -132,9 +132,6 @@ export class PassagemComponent implements OnInit {
     this.dadosFormGroup.controls['contatoEmergencia'].setValue(
         this.processarNumeroTelefone(this.dadosFormGroup.controls['contatoEmergencia'].value)
     )
-
-    console.log(this.dadosFormGroup.controls['telefone'].value);
-    console.log(this.dadosFormGroup.controls['contatoEmergencia'].value);
 
     this.assentoFormGroup.controls['assento'].value.passageiro = {
       id: null,
