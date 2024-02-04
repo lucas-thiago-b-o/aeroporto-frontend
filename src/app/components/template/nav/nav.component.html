@@ -13,7 +13,7 @@
                 <i class="material-icons">shopping_cart</i>
                 Comprar Passagens
             </a>
-            <a *ngIf="service.haveAccess()" mat-list-item>
+            <a routerLink="/voos" *ngIf="service.haveAccess()" mat-list-item>
                 <i class="material-icons">flight_takeoff</i>
                 Voôs
             </a>
