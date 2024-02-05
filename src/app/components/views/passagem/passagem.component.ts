@@ -100,8 +100,8 @@ export class PassagemComponent implements OnInit {
   }
 
   pesquisarPassagens() {
-    const idOrigem = this.cidades.filter(o => o.nome.toLowerCase().includes(this.myControlOrigem.value.toLowerCase()))[0].id;
-    const idDestino = this.cidades.filter(o => o.nome.toLowerCase().includes(this.myControlDestino.value.toLowerCase()))[0].id;
+    const idOrigem = this.cidades.filter(o => o.nome?.toLowerCase().includes(this.myControlOrigem.value.toLowerCase()))[0]?.id;
+    const idDestino = this.cidades.filter(o => o.nome?.toLowerCase().includes(this.myControlDestino.value.toLowerCase()))[0]?.id;
     this.vooService.getAllVoosByCidades(idOrigem, idDestino).subscribe(voos => {
       if (voos && voos.length > 0) {
         this.voos = voos;

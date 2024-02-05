@@ -1,65 +1,97 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { PassagemService } from '../../../service/passagem.service';
-import { AuthService } from '../../../service/auth.service';
-import { PassagemDTO } from '../../../shared/models/models';
+import { Pipe, PipeTransform, Injectable, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Directive, Input } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { of as observableOf} from 'rxjs';
+
 import { MinhasPassagensComponent } from './minhas-passagens.component';
+import { AuthService } from '../../../service/auth.service';
+import { PassagemService } from '../../../service/passagem.service';
+
+@Injectable()
+class MockAuthService {}
+
+@Injectable()
+class MockPassagemService {}
+
+@Directive({ selector: '[myCustom]' })
+class MyCustomDirective {
+    @Input() myCustom: any;
+}
+
+@Pipe({name: 'translate'})
+class TranslatePipe implements PipeTransform {
+    transform(value: any) { return value; }
+}
+
+@Pipe({name: 'phoneNumber'})
+class PhoneNumberPipe implements PipeTransform {
+    transform(value: any) { return value; }
+}
+
+@Pipe({name: 'safeHtml'})
+class SafeHtmlPipe implements PipeTransform {
+    transform(value: any) { return value; }
+}
 
 describe('MinhasPassagensComponent', () => {
-  let component: MinhasPassagensComponent;
-  let fixture: ComponentFixture<MinhasPassagensComponent>;
+    let fixture: ComponentFixture<MinhasPassagensComponent>;
+    let component: { ngOnDestroy: () => void; authService: { getUuid?: any; }; passagemService: { getPassagemByUsuario?: any; cancelarPassagem?: any; }; ngOnInit: () => void; verificarDiferencaDeHoras: jest.Mock<any, any, any> | ((arg0: {}) => void); htmltoPDF: (arg0: {}, arg1: {}) => void; cancelarPassagem: (arg0: {}) => void; };
 
-  beforeEach(() => {
-    const passagemServiceStub = () => ({
-      getPassagemByUsuario: (uuid: any) => ({ subscribe: (f: (arg0: {}) => any) => f({}) }),
-      cancelarPassagem: (passagem: any) => ({ subscribe: (f: (arg0: {}) => any) => f({}) })
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [ FormsModule, ReactiveFormsModule ],
+            declarations: [
+                MinhasPassagensComponent,
+                TranslatePipe, PhoneNumberPipe, SafeHtmlPipe,
+                MyCustomDirective
+            ],
+            schemas: [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
+            providers: [
+                { provide: AuthService, useClass: MockAuthService },
+                { provide: PassagemService, useClass: MockPassagemService }
+            ]
+        }).overrideComponent(MinhasPassagensComponent, {
+
+        }).compileComponents();
+        fixture = TestBed.createComponent(MinhasPassagensComponent);
+        component = fixture.debugElement.componentInstance;
     });
-    const authServiceStub = () => ({ getUuid: () => ({}) });
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [MinhasPassagensComponent],
-      providers: [
-        { provide: PassagemService, useFactory: passagemServiceStub },
-        { provide: AuthService, useFactory: authServiceStub }
-      ]
+
+    afterEach(() => {
+        component.ngOnDestroy = function() {};
+        fixture.destroy();
     });
-    fixture = TestBed.createComponent(MinhasPassagensComponent);
-    component = fixture.componentInstance;
-  });
 
-  it('can load instance', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it(`passagens has default value`, () => {
-    expect(component.passagens).toEqual([]);
-  });
-
-  describe('cancelarPassagem', () => {
-    it('makes expected calls', () => {
-      const passagemServiceStub: PassagemService = fixture.debugElement.injector.get(
-        PassagemService
-      );
-      const passagemDTOStub: PassagemDTO = <any>{};
-      spyOn(passagemServiceStub, 'cancelarPassagem').and.callThrough();
-      component.cancelarPassagem(passagemDTOStub);
-      expect(passagemServiceStub.cancelarPassagem).toHaveBeenCalled();
+    it('should run #constructor()', async () => {
+        expect(component).toBeTruthy();
     });
-  });
 
-  describe('ngOnInit', () => {
-    it('makes expected calls', () => {
-      const passagemServiceStub: PassagemService = fixture.debugElement.injector.get(
-        PassagemService
-      );
-      const authServiceStub: AuthService = fixture.debugElement.injector.get(
-        AuthService
-      );
-      spyOn(passagemServiceStub, 'getPassagemByUsuario').and.callThrough();
-      spyOn(authServiceStub, 'getUuid').and.callThrough();
-      component.ngOnInit();
-      expect(passagemServiceStub.getPassagemByUsuario).toHaveBeenCalled();
-      expect(authServiceStub.getUuid).toHaveBeenCalled();
+    it('should run #ngOnInit()', async () => {
+        component.authService = component.authService || {};
+        component.authService.getUuid = jest.fn();
+        component.passagemService = component.passagemService || {};
+        component.passagemService.getPassagemByUsuario = jest.fn().mockReturnValue(observableOf({}));
+        component.ngOnInit();
+        expect(component.authService.getUuid).toHaveBeenCalled();
+        expect(component.passagemService.getPassagemByUsuario).toHaveBeenCalled();
     });
-  });
+
+    it('should run #verificarDiferencaDeHoras()', async () => {
+        component.verificarDiferencaDeHoras({});
+    });
+
+    it('should run #cancelarPassagem()', async () => {
+        const jsdomAlert = window.alert;
+        window.alert = () => {};
+        component.passagemService = component.passagemService || {};
+        component.passagemService.cancelarPassagem = jest.fn().mockReturnValue(observableOf({}));
+        Object.defineProperty(window, 'location', {
+            value: { reload: jest.fn() }
+        });
+        component.cancelarPassagem({});
+        window.alert = jsdomAlert;
+        expect(component.passagemService.cancelarPassagem).toHaveBeenCalled();
+        expect(window.location.reload).toHaveBeenCalled();
+    });
+
 });
